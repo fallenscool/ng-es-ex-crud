@@ -1,0 +1,28 @@
+.desc.mat-line {
+  width: 100%;
+  padding-top: 10px;
+  display: flex;
+  
+  span {
+    flex-basis: 20%;
+    
+  }
+}
+.mat-toolbar-single-row{
+  padding: 10px;
+  height: auto;
+}
+.spiner__wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 0;
+}
+.user__btns{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  button{
+    margin: 0 5px;
+  }
+}

@@ -1,0 +1,30 @@
+<div *ngIf="!loading">
+  <mat-toolbar>
+    Users
+    <button mat-fab aria-label="Example icon-button with a heart icon" style="margin-left: auto">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-list>
+    <mat-list-item *ngFor="let user of usersService.users; let i = index">
+      <h3 matLine>{{user.name}} {{user.surname}}</h3>
+      <div matLine class="desc">
+        <span>Birthday: {{user.birthday}}</span>
+        <span>Email: {{user.email}}</span>
+        <span>Tel: {{user.phone}}</span>
+        <span>Create/Update: {{user["create/update"]}}</span>
+      </div>
+      <div class="user__btns">
+        <button mat-icon-button aria-label="icon-button with a heart icon" color="primary">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="icon-button with a heart icon" color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
+<div *ngIf="loading" class="spiner__wrap">
+  <mat-spinner color="accent"></mat-spinner>
+</div>

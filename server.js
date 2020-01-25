@@ -6,7 +6,7 @@ const moment = require('moment');
 
 const app = express();
 app.use(express.json());
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3200;
 
 // Get users from db.json
 const data = fs.readFileSync('db.json');
