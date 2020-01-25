@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "create/update": "25.01.2020 19:59",
+    "name": "Ann",
+    "surname": "Dinks",
+    "birthday": "02.03.2000",
+    "phone": "0129876543",
+    "email": "ann02@mail.com"
+  },
+  {
+    "id": 2,
+    "create/update": "25.01.2020 19:59",
+    "name": "Dave",
+    "surname": "Collins",
+    "birthday": "20.05.1999",
+    "phone": "0123456789",
+    "email": "dave99@mail.com"
+  },
+  {
+    "id": 3,
+    "create/update": "25.01.2020 20:03",
+    "name": "Chloe",
+    "surname": "Mars",
+    "birthday": "16.12.1995",
+    "phone": "0987654321",
+    "email": "mars26@mail.com"
+  }
+]
