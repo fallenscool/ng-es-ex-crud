@@ -10,13 +10,13 @@
     <mat-list-item *ngFor="let user of users; let i = index">
       <h3 matLine>{{user.name}} {{user.surname}}</h3>
       <div matLine class="desc">
-        <span>Birthday: {{user.birthday}}</span>
+        <span>Birthday: {{transformBirthdayDate(user.birthday)}}</span>
         <span>Email: {{user.email}}</span>
         <span>Tel: {{user.phone}}</span>
-        <span>Create/Update: {{user["create/update"]}}</span>
+        <span>Create/Update: {{transformDate(user["create/update"])}}</span>
       </div>
       <div class="user__btns">
-        <button mat-icon-button aria-label="icon-button with a heart icon" color="primary">
+        <button mat-icon-button aria-label="icon-button with a heart icon" color="primary" (click)="editUser(user.id)">
           <mat-icon>edit</mat-icon>
         </button>
         <button mat-icon-button aria-label="icon-button with a heart icon" color="warn"

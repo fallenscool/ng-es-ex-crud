@@ -1,31 +1,50 @@
-<div class="container">
-
+<div class="container" *ngIf="!loading">
   <mat-card class="card">
     <mat-card-header>
-      <mat-card-title>Add User</mat-card-title>
-      <a mat-button routerLink="" color="accent">Back to list</a>
+      <mat-card-title>{{editing ? 'Edit User' : 'Add User'}}</mat-card-title>
+      <a mat-button routerLink="/list" color="accent">Back to list</a>
     </mat-card-header>
     <mat-card-content>
-      <form class="form">
+      <form [formGroup]="myForm" class="form" (ngSubmit)=" editing ? editForm(User.id) : submitForm()">
         <mat-form-field>
-          <input matInput placeholder="Name" value="" name="name" [(ngModel)]="data.name">
+          <input matInput placeholder="Name" value="{{editing ? User.name : ''}}" formControlName="name">
+          <mat-error *ngIf="errorHandling('name', 'required')">
+            You must provide a correct <strong>name</strong> (min:3, max:60)
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Surname" value="" name="surname" [(ngModel)]="data.surname">
+          <input matInput placeholder="Surname" value="{{editing ? User.surname : ''}}" formControlName="surname">
+          <mat-error *ngIf="errorHandling('surname', 'required')">
+            You must provide a correct <strong>surname</strong> (min:3, max:60)
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Email" name="email" [(ngModel)]="data.email">
+          <input matInput placeholder="Email" value="{{editing ? User.email : ''}}" formControlName="email">
+          <mat-error *ngIf="errorHandling('email', 'required')">
+            You must provide a correct <strong>email</strong> (example: test@mail.com)
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input type="tel" matInput placeholder="Phone Number" name="tel" [(ngModel)]="data.phone">
+          <input type="tel" matInput placeholder="Phone Number" value="{{editing ? User.phone : ''}}"
+                 formControlName="phone">
+          <mat-error *ngIf="errorHandling('phone', 'required')">
+            You must provide a correct <strong>phone number</strong> (example: 0223334455)
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="Choose a date" name="birthday" [(ngModel)]="data.birthday">
+          <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="birthday" readonly
+                 value="{{editing ? User.birthday : ''}}">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #picker disabled="false"></mat-datepicker>
+          <mat-error *ngIf="errorHandling('phone', 'required')">
+            Choose correct date
+          </mat-error>
         </mat-form-field>
-        <button type="submit" mat-flat-button color="primary" (click)="submitForm()">Add</button>
+        <button type="submit" mat-flat-button color="primary">{{editing ? 'Edit' : 'Add'}}</button>
       </form>
     </mat-card-content>
   </mat-card>
+</div>
+<div *ngIf="loading" class="spiner__wrap">
+  <mat-spinner color="accent"></mat-spinner>
 </div>

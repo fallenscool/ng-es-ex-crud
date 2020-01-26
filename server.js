@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const _ = require('lodash');
 const Joi = require('joi');
-const moment = require('moment');
 
 const app = express();
 app.use(express.json());
@@ -16,7 +15,7 @@ let users = JSON.parse(data);
 const userSchema = {
     name: Joi.string().min(3).max(60).required(),
     surname: Joi.string().min(3).max(60).required(),
-    birthday: Joi.string().regex(/^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/, {name: 'dd.mm.yyyy'}).required(),
+    birthday: Joi.string().required(),
     phone: Joi.string().regex(/^0\d{9}$/, {name: 'phone number (0xxyyyyyyy)'}).required(),
     email: Joi.string().email().required(),
 };
@@ -38,7 +37,7 @@ app.post('/api/users', (req, res) => {
     }
     let newUser = {
         id: _.last(users).id + 1,
-        "create/update": moment(new Date().toISOString()).format('DD.MM.YYYY HH:mm')
+        "create/update": new Date()
     };
     _.forEach(req.body, (value, key) => newUser[key] = value);
     users.push(newUser);
@@ -67,7 +66,7 @@ app.put('/api/users/:id', (req, res) => {
     }
     let newUser = {
         id: id,
-        "create/update": moment(new Date().toISOString()).format('DD.MM.YYYY HH:mm')
+        "create/update": new Date()
     };
     _.forEach(req.body, (value, key) => newUser[key] = value);
     users = _.map(users, user => user.id === id ? newUser : user);

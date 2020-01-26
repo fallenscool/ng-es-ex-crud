@@ -1,47 +1,47 @@
 [
   {
-    "id": 1,
-    "create/update": "25.01.2020 19:59",
-    "name": "Ann",
-    "surname": "Kims",
-    "birthday": "20.05.1999",
-    "phone": "0123456789",
-    "email": "ann25@mail.com"
-  },
-  {
-    "id": 2,
-    "create/update": "25.01.2020 19:59",
-    "name": "Dave",
-    "surname": "Collins",
-    "birthday": "20.05.1999",
-    "phone": "0123456789",
-    "email": "dave99@mail.com"
-  },
-  {
-    "id": 3,
-    "create/update": "25.01.2020 20:03",
+    "id": 7,
+    "create/update": "2020-01-26T13:18:08.305Z",
     "name": "Chloe",
     "surname": "Mars",
-    "birthday": "16.12.1995",
+    "email": "mars26@mail.com",
     "phone": "0987654321",
-    "email": "mars26@mail.com"
+    "birthday": "2019-12-31T22:00:00.000Z"
   },
   {
-    "id": 4,
-    "create/update": "26.01.2020 12:23",
+    "id": 8,
+    "create/update": "2020-01-26T13:18:10.340Z",
     "name": "Nick",
-    "surname": "ASDFG",
-    "email": "asd@asd.com",
-    "phone": "0987654321",
-    "birthday": "25.01.2020"
-  },
-  {
-    "id": 5,
-    "create/update": "26.01.2020 12:25",
-    "name": "Nick",
-    "surname": "Dgjkdklfg",
-    "email": "lkj@hgfjg.com",
+    "surname": "Brew",
+    "email": "brew12@mail.com",
     "phone": "0123456789",
-    "birthday": "09.01.2020"
+    "birthday": "2019-12-31T22:00:00.000Z"
+  },
+  {
+    "id": 9,
+    "create/update": "2020-01-26T13:17:03.630Z",
+    "name": "Ann1",
+    "surname": "Collins1",
+    "email": "colann1@mail.com",
+    "phone": "0987654321",
+    "birthday": "2019-12-31T22:00:00.000Z"
+  },
+  {
+    "id": 10,
+    "create/update": "2020-01-26T13:18:11.988Z",
+    "name": "Dave",
+    "surname": "Kavin",
+    "email": "asd@dsa.com",
+    "phone": "0123456789",
+    "birthday": "2020-01-08T22:00:00.000Z"
+  },
+  {
+    "id": 11,
+    "create/update": "2020-01-26T13:18:35.475Z",
+    "name": "Some New User",
+    "surname": "UserSurname",
+    "email": "asd@dsa.com",
+    "phone": "0123456789",
+    "birthday": "2020-01-16T22:00:00.000Z"
   }
 ]
