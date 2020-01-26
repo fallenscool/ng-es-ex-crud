@@ -54,24 +54,19 @@ export class UserFormComponent implements OnInit {
     return this.myForm.controls[control].hasError(error);
   };
 
-  submitForm() {
+  submitForm(id) {
     this.submitted = true;
     if (this.myForm.invalid) {
       return console.log('error');
     }
     this.User = this.myForm.value;
-    this.usersService.createUser(this.User).subscribe(res => {
-      this.router.navigate(['list']);
-    });
-  }
+    if(this.editing){
+      return this.usersService.updateUser(id, this.User).subscribe(res => {
+        this.router.navigate(['list']);
+      });
+    }
 
-  editForm(id) {
-    this.submitted = true;
-    if (this.myForm.invalid) {
-      return console.log('error');
-    }
-    this.User = this.myForm.value;
-    this.usersService.updateUser(id, this.User).subscribe(res => {
+    return this.usersService.createUser(this.User).subscribe(res => {
       this.router.navigate(['list']);
     });
   }
