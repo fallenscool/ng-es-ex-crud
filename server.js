@@ -16,8 +16,8 @@ let users = JSON.parse(data);
 const userSchema = {
     name: Joi.string().min(3).max(60).required(),
     surname: Joi.string().min(3).max(60).required(),
-    birthday: Joi.string().regex(/^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/, {name:'dd.mm.yyyy'}),
-    phone: Joi.string().regex(/^0\d{9}$/, {name: 'phone number (0xxyyyyyyy)'}),
+    birthday: Joi.string().regex(/^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/, {name: 'dd.mm.yyyy'}).required(),
+    phone: Joi.string().regex(/^0\d{9}$/, {name: 'phone number (0xxyyyyyyy)'}).required(),
     email: Joi.string().email().required(),
 };
 
@@ -27,7 +27,7 @@ app.get('/api/users/:id?', (req, res) => {
     const id = Number(req.params.id);
     if (!id) return res.send(users);
     let user = _.find(users, ['id', id]);
-    return res.send(user ? user : `User with id ${id} not found!`);
+    return res.send(user ? user : {message: `User with id ${id} not found!`});
 });
 
 // Create user
@@ -53,9 +53,9 @@ app.delete('/api/users/:id', (req, res) => {
     if (exist) {
         users = _.remove(users, user => user.id !== id);
         saveToBase(users);
-        return res.send(`User with id ${id} was deleted!`);
+        return res.status(200).send({message: `User with id ${id} was deleted!`});
     }
-    return res.send(`User with id ${id} doesn't exist`);
+    return res.status(404).send({message: `User with id ${id} doesn't exist`});
 });
 
 //Update user

@@ -1,12 +1,13 @@
 <div *ngIf="!loading">
   <mat-toolbar>
     Users
-    <button mat-fab aria-label="Example icon-button with a heart icon" style="margin-left: auto">
+    <button mat-fab aria-label="Example icon-button with a heart icon" style="margin-left: auto"
+            [routerLink]="[ '/create']">
       <mat-icon>add</mat-icon>
     </button>
   </mat-toolbar>
   <mat-list>
-    <mat-list-item *ngFor="let user of usersService.users; let i = index">
+    <mat-list-item *ngFor="let user of users; let i = index">
       <h3 matLine>{{user.name}} {{user.surname}}</h3>
       <div matLine class="desc">
         <span>Birthday: {{user.birthday}}</span>
@@ -18,10 +19,12 @@
         <button mat-icon-button aria-label="icon-button with a heart icon" color="primary">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button aria-label="icon-button with a heart icon" color="warn">
+        <button mat-icon-button aria-label="icon-button with a heart icon" color="warn"
+                (click)="this.deleteUser(user.id)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
+      <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
 </div>
