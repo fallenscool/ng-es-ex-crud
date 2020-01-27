@@ -1,16 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {UsersService} from "../shared/users.service";
 import {Router} from "@angular/router";
-import * as moment from "moment";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
+
 export class UsersComponent implements OnInit {
   private loading: boolean = true;
   private users: any;
+  private searchString: string;
+  private lowValue: number = 0;
+  private highValue: number = 5;
+
 
   constructor(private usersService: UsersService, private router: Router) {
     this.users = []
@@ -20,7 +25,7 @@ export class UsersComponent implements OnInit {
     this.getAllUsers();
   }
 
-  //Get all users
+  // Get all users
   getAllUsers() {
     this.usersService.fetchUsers()
       .subscribe(response => {
@@ -29,22 +34,21 @@ export class UsersComponent implements OnInit {
       })
   }
 
-  //Delete user by id
-  deleteUser(id) {
-    this.usersService.deleteUser(id).subscribe(Response => {
-      this.getAllUsers();
-    });
+  // Delete user by id
+  deleteUser(id: number) {
+    this.usersService.deleteUser(id)
+      .subscribe(Response => {
+        this.getAllUsers();
+      });
   }
 
-  editUser(id: any) {
-    this.router.navigate([`/edit/${id}`]);
+  editUser(id: number) {
+    return this.router.navigate([`/edit/${id}`]);
   }
 
-  transformBirthdayDate(date) {
-    return moment(date).format('DD.MM.YYYY');
+  getPaginatorData(event: PageEvent): PageEvent {
+    this.lowValue = event.pageIndex * event.pageSize;
+    this.highValue = this.lowValue + event.pageSize;
+    return event;
   }
-  transformDate(date) {
-    return moment(date).format('DD.MM.YYYY HH:MM');
-  }
-
 }

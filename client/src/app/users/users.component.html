@@ -11,33 +11,46 @@
   </mat-toolbar>
 
   <mat-list>
-    <mat-list-item *ngFor="let user of users">
+    <mat-list-item style="padding-top: 10px;">
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Filter Users by name..."
+          [(ngModel)]="searchString"
+        >
+      </mat-form-field>
+    </mat-list-item>
+    <mat-list-item *ngFor="let user of users | usersFilter: searchString | slice: lowValue : highValue">
       <h3 matLine>{{user.name}} {{user.surname}}</h3>
-      <div matLine class="desc">
-        <span>Birthday: {{transformBirthdayDate(user.birthday)}}</span>
+      <p matLine class="middle">
+        <span>Birthday: {{user.birthday | date: 'dd.MM.yyyy'}}</span>
         <span>Email: {{user.email}}</span>
         <span>Tel: {{user.phone}}</span>
-        <span>Create/Update: {{transformDate(user["create/update"])}}</span>
-      </div>
-      <div class="user__btns">
-        <button
-          mat-icon-button
-          color="primary"
-          (click)="editUser(user.id)"
-        >
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="this.deleteUser(user.id)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
+      </p>
+      <p matLine>Create/Update: {{ user["create/update"] | date: 'dd.MM.yyyy hh:mm'}}</p>
+      <button
+        mat-icon-button
+        color="primary"
+        (click)="editUser(user.id)"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        color="warn"
+        (click)="this.deleteUser(user.id)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
+  <mat-paginator
+    [length]="users.length"
+    [pageSize]="5"
+    (page)="getPaginatorData($event)"
+    [pageSizeOptions]="[2, 5, 10]"
+  ></mat-paginator>
 </div>
 
 <div *ngIf="loading" class="spiner__wrap">

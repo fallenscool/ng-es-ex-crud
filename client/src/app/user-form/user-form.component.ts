@@ -10,6 +10,7 @@ import {User} from "../models/user";
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
 })
+
 export class UserFormComponent implements OnInit {
   private myForm: FormGroup;
   private submitted: boolean = false;
@@ -22,10 +23,10 @@ export class UserFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.editing = !!this.router.url.trim().includes('edit');
+    this.editing = !!this.router.url.includes('edit');
     if (this.editing) {
-      let userId = Number(_.last(this.router.url.trim().split('/')));
-      return this.getUser(userId);
+      let id = Number(_.last(this.router.url.split('/')));
+      return this.getUser(id);
     }
     this.reactiveForm();
     this.loading = false;
@@ -41,7 +42,7 @@ export class UserFormComponent implements OnInit {
     })
   }
 
-  getUser(id) {
+  getUser(id: number) {
     this.usersService.fetchUser(id)
       .subscribe(response => {
         this.User = response;
@@ -54,19 +55,23 @@ export class UserFormComponent implements OnInit {
     return this.myForm.controls[control].hasError(error);
   };
 
-  submitForm(id) {
+  submitForm(id: number) {
     this.submitted = true;
+
     if (this.myForm.invalid) {
       return console.log('error');
     }
     this.User = this.myForm.value;
-    if(this.editing){
+
+    if (this.editing) {
       return this.usersService.updateUser(id, this.User).subscribe(res => {
+        console.log(res);
         this.router.navigate(['list']);
       });
     }
 
     return this.usersService.createUser(this.User).subscribe(res => {
+      console.log(res);
       this.router.navigate(['list']);
     });
   }

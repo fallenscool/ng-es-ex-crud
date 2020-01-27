@@ -18,12 +18,15 @@ import {MatCardModule} from "@angular/material/card";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {UsersFilterPipe} from "./shared/users-filter.pipe";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
-    UserFormComponent
+    UserFormComponent,
+    UsersFilterPipe,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     MatDatepickerModule,
     MatNativeDateModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

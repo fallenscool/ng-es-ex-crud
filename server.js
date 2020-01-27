@@ -42,7 +42,7 @@ app.post('/api/users', (req, res) => {
     _.forEach(req.body, (value, key) => newUser[key] = value);
     users.push(newUser);
     saveToBase(users);
-    res.send(newUser);
+    res.status(200).send({message: `User ${newUser.name} ${newUser.surname} has been created!`});
 });
 
 // Delete user
@@ -71,7 +71,7 @@ app.put('/api/users/:id', (req, res) => {
     _.forEach(req.body, (value, key) => newUser[key] = value);
     users = _.map(users, user => user.id === id ? newUser : user);
     saveToBase(users);
-    res.send(newUser);
+    res.status(200).send({message: `User ${newUser.name} ${newUser.surname} has been updated!`});
 });
 
 //Save new users array to db.json
