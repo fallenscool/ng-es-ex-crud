@@ -7,7 +7,7 @@ import {User} from "../models/user";
 @Injectable({providedIn: 'root'})
 
 export class UsersService {
-  base_path = '/api/users';
+  base_path = '/api/v1/users';
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'

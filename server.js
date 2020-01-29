@@ -1,87 +1,31 @@
 const express = require('express');
-const fs = require('fs');
-const _ = require('lodash');
-const Joi = require('joi');
-
+const path = require('path');
 const app = express();
-app.use(express.json());
 const PORT = process.env.PORT || 3200;
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
-// Get users from db.json
-const data = fs.readFileSync('db.json');
-let users = JSON.parse(data);
+app.set('port', PORT);
+app.set('env', NODE_ENV);
 
-//create user schema for validation
-const userSchema = {
-    name: Joi.string().min(3).max(60).required(),
-    surname: Joi.string().min(3).max(60).required(),
-    birthday: Joi.string().required(),
-    phone: Joi.string().regex(/^0\d{9}$/, {name: 'phone number (0xxyyyyyyy)'}).required(),
-    email: Joi.string().email().required(),
-};
+app.use(express.json());
+app.use('/', require(path.join(__dirname, 'routes/usersRoutes.js')));
 
-
-// Read user/users
-app.get('/api/users/:id?', (req, res) => {
-    const id = Number(req.params.id);
-    if (!id) return res.send(users);
-    let user = _.find(users, ['id', id]);
-    return res.send(user ? user : {message: `User with id ${id} not found!`});
+app.use((req, res, next) => {
+    const err = new Error(`${req.method} ${req.url} Not Found`);
+    err.status = 404;
+    next(err);
 });
 
-// Create user
-app.post('/api/users', (req, res) => {
-    const valid = Joi.validate(req.body, userSchema);
-    if (valid.error) {
-        return res.status(400).send(valid.error.details[0].message);
-    }
-    let newUser = {
-        id: _.last(users).id + 1,
-        "create/update": new Date()
-    };
-    _.forEach(req.body, (value, key) => newUser[key] = value);
-    users.push(newUser);
-    saveToBase(users);
-    res.status(200).send({message: `User ${newUser.name} ${newUser.surname} has been created!`});
-});
-
-// Delete user
-app.delete('/api/users/:id', (req, res) => {
-    const id = Number(req.params.id);
-    const exist = !!_.find(users, ["id", id]);
-    if (exist) {
-        users = _.remove(users, user => user.id !== id);
-        saveToBase(users);
-        return res.status(200).send({message: `User with id ${id} was deleted!`});
-    }
-    return res.status(404).send({message: `User with id ${id} doesn't exist`});
-});
-
-//Update user
-app.put('/api/users/:id', (req, res) => {
-    const valid = Joi.validate(req.body, userSchema);
-    const id = Number(req.params.id);
-    if (valid.error) {
-        return res.status(400).send(valid.error.details[0].message);
-    }
-    let newUser = {
-        id: id,
-        "create/update": new Date()
-    };
-    _.forEach(req.body, (value, key) => newUser[key] = value);
-    users = _.map(users, user => user.id === id ? newUser : user);
-    saveToBase(users);
-    res.status(200).send({message: `User ${newUser.name} ${newUser.surname} has been updated!`});
-});
-
-//Save new users array to db.json
-const saveToBase = (arr) => {
-    let data = JSON.stringify(arr, null, 2);
-    return fs.writeFile('db.json', data, (err, result) => {
-        if (err) console.log('error', err);
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(err.status || 500);
+    res.json({
+        error: {
+            message: err.message,
+        },
     });
-};
+});
 
 app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`)
+    console.log(`Server has been started on port: ${app.get('port')} | environment: ${app.get('env')}`)
 });
