@@ -1,21 +1,76 @@
-.mat-list-base .mat-list-item .mat-line.middle {
-  display: flex;
+table {
   width: 100%;
-  padding: 10px 0;
+}
+
+.header {
+  padding: 0 16px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   
-  span {
-    flex: 0 0 30%;
+  &__right {
+    button {
+      margin-left: 10px;
+    }
   }
 }
 
-.mat-toolbar-single-row {
-  padding: 10px;
-  height: auto;
+.mat-card-header .mat-card-title.header__title {
+  margin-bottom: 0;
 }
 
-.spiner__wrap {
+.users-table-container {
+  padding: 16px 0;
+  position: relative;
+}
+
+.users-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 50px 0;
+}
+
+.card {
+  &__content {
+    display: flex;
+  }
+  
+  &__btns {
+    display: flex;
+    flex-basis: 10%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  &__table {
+    flex-basis: 90%;
+  }
+}
+
+.role-radio-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 10px 0;
+}
+
+.role-radio-item {
+  padding: 10px;
+  text-transform: capitalize;
+}
+
+tr.users-element-row {
+  transition: 0.15s all;
+  cursor: pointer;
+  
+  &:hover {
+    background: rgba(#777, 0.15);
+  }
 }

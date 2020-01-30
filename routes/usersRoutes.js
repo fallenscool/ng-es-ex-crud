@@ -4,17 +4,33 @@ const path = require('path');
 const _ = require('lodash');
 const Joi = require('joi');
 
+const {Client} = require('@elastic/elasticsearch');
+const client = new Client({node: 'http://localhost:9200'});
+
 const usersFilePath = path.join(__dirname, '../db.json');
 const userSchema = require('../models/userSchema');
 
 const router = Router();
 
+const checkQueries = (queries) => {
+    if (!!queries.role) {
+        return {query: {match: {role: queries.role}}}
+    }
+    return {aggs: {role: {terms: {field: "role"}}}};
+};
+
 //Get all users
 const getUsers = async (req, res, next) => {
     try {
-        const data = await fs.readFileSync(usersFilePath);
-        const users = JSON.parse(data);
-        res.status(200).json(users);
+        const result = await client.search({
+            index: 'users',
+            body: checkQueries(req.query)
+        });
+        res.status(200).json({
+            status: 200,
+            message: 'Everything OK',
+            result: result.body,
+        });
     } catch (e) {
         next(e);
     }
@@ -23,15 +39,16 @@ const getUsers = async (req, res, next) => {
 //Get one user
 const getUser = async (req, res, next) => {
     try {
-        const data = await fs.readFileSync(usersFilePath);
-        const users = JSON.parse(data);
-        const user = users.find(user => user.id === Number(req.params.id));
-        if (!user) {
-            const err = new Error('User not found');
-            err.status = 404;
-            throw err;
-        }
-        res.status(200).json(user)
+        const result = await client.get({
+            index: 'users',
+            id: req.params.id
+        });
+        res.status(result.statusCode).json({
+            status: result.statusCode,
+            message: 'Everything OK',
+            result: result.body._source,
+        });
+
     } catch (e) {
         next(e);
     }
@@ -46,20 +63,18 @@ const createUser = async (req, res, next) => {
             err.status = 400;
             throw err;
         }
-        const data = await fs.readFileSync(usersFilePath);
-        let users = JSON.parse(data);
         let newUser = {
-            id: _.last(users).id + 1,
             created: new Date()
         };
         _.forEach(req.body, (value, key) => newUser[key] = value);
-        users.push(newUser);
-        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-        res.status(201).json({
-            success: {
-                message: `User ${newUser.name} ${newUser.surname} has been created!`
-            }
-        })
+        const result = await client.index({
+            index: 'users',
+            body: newUser
+        });
+        res.status(result.statusCode).json({
+            status: result.statusCode,
+            message: `User ${newUser.name} ${newUser.surname} has been created!`
+        });
     } catch (e) {
         next(e)
     }
@@ -68,18 +83,15 @@ const createUser = async (req, res, next) => {
 //Delete user by id
 const deleteUser = async (req, res, next) => {
     try {
-        const data = await fs.readFileSync(usersFilePath);
-        let users = JSON.parse(data);
-        const id = Number(req.params.id);
-        const exist = !!_.find(users, ["id", id]);
-        if (!exist) {
-            const err = new Error('User not found');
-            err.status = 404;
-            throw err;
-        }
-        users = _.remove(users, user => user.id !== id);
-        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-        res.status(200).json({success: {message: 'User was deleted!'}})
+        const result = await client.delete({
+            index: 'users',
+            id: req.params.id
+        });
+        res.status(result.statusCode).json({
+            status: result.statusCode,
+            message: `User has been deleted!`,
+            result
+        });
     } catch (e) {
         next(e)
     }
@@ -94,23 +106,44 @@ const editUser = async (req, res, next) => {
             err.status = 400;
             throw err;
         }
-        const data = await fs.readFileSync(usersFilePath);
-        let users = JSON.parse(data);
-        const id = Number(req.params.id);
-        const exist = !!_.find(users, ["id", id]);
-        if (!exist) {
-            const err = new Error('User not found');
-            err.status = 404;
-            throw err;
-        }
         let newUser = {
-            id,
             created: new Date()
         };
         _.forEach(req.body, (value, key) => newUser[key] = value);
-        users = _.map(users, user => user.id === id ? newUser : user);
-        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-        res.status(201).json({success: {message: `User ${newUser.name} ${newUser.surname} has been updated!`}})
+
+        const result = await client.index({
+            index: 'users',
+            id: req.params.id,
+            body: newUser
+        });
+        res.status(result.statusCode).json({
+            status: result.statusCode,
+            message: `User ${newUser.name} ${newUser.surname} has been updated!`,
+            result: result
+        });
+    } catch (e) {
+        next(e)
+    }
+};
+
+const deleteUsers = async (req, res, next) => {
+    try {
+        const ids = Object.values(req.body);
+        const result = await client.deleteByQuery({
+            index: 'users',
+            body: {
+                query: {
+                    terms: {
+                        _id: ids
+                    }
+                }
+            }
+        });
+        res.status(result.statusCode).json({
+            status: result.statusCode,
+            message: `Users has been deleted`,
+            result: result
+        });
     } catch (e) {
         next(e)
     }
@@ -119,7 +152,8 @@ const editUser = async (req, res, next) => {
 router
     .route('/api/v1/users')
     .get(getUsers)
-    .post(createUser);
+    .post(createUser)
+    .delete(deleteUsers);
 
 router
     .route('/api/v1/users/:id')

@@ -1,0 +1,56 @@
+<div class="modal__content">
+  <div class="modal__form-wrap" *ngIf="!loading">
+    <mat-card-header>
+      <mat-card-title class="form__title">{{this.data.editing ? 'Edit User' : 'Add User'}}</mat-card-title>
+    </mat-card-header>
+
+    <form [formGroup]="this.myForm" class="form" (ngSubmit)="this.submitForm()">
+
+      <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Surname" formControlName="surname">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Email" formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Phone Number" formControlName="phone" maxlength="10">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Gender" formControlName="gender">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Role" formControlName="role">
+      </mat-form-field>
+
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="birthday" readonly>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker disabled="false"></mat-datepicker>
+      </mat-form-field>
+
+      <div class="btn__group">
+        <button type="submit" mat-flat-button color="primary" *ngIf="!this.data.editing">
+          Add
+        </button>
+        <button type="submit" mat-flat-button color="primary" *ngIf="this.data.editing">
+          Edit
+        </button>
+        <button type="submit" mat-flat-button color="accent" *ngIf="this.data.editing" (click)="this.deleteUser($event)">
+          Delete
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="users-loading-shade" *ngIf="loading">
+    <mat-spinner *ngIf="loading"></mat-spinner>
+  </div>
+</div>

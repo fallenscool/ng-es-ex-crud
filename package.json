@@ -5,9 +5,10 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run start\" \"npm run client\" "
+    "dev": "concurrently \"npm run server\" \"npm run client\" "
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^7.5.0",
     "concurrently": "^5.0.2",
     "express": "^4.17.1",
     "joi": "^14.3.1",

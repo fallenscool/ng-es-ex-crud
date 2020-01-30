@@ -3,7 +3,9 @@ export class User {
   "create/update": string;
   name: string;
   surname: string;
-  birthday: string;
+  birthday: Date;
   phone: string;
   email: string;
+  gender: string;
+  role: string;
 }

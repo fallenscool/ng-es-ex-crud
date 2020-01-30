@@ -6,4 +6,6 @@ module.exports = {
     birthday: Joi.string().required(),
     phone: Joi.string().regex(/^0\d{9}$/, {name: 'phone number (0xxyyyyyyy)'}).required(),
     email: Joi.string().email().required(),
+    role: Joi.string().valid('dev','qa','pm','admin').required(),
+    gender: Joi.string().valid('male','female')
 };

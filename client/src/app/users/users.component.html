@@ -1,58 +1,108 @@
-<div *ngIf="!loading">
-  <mat-toolbar>
-    Users
-    <button
-      mat-fab
-      style="margin-left: auto"
-      [routerLink]="[ '/create']"
-    >
-      <mat-icon>add</mat-icon>
-    </button>
-  </mat-toolbar>
+<mat-card class="users-table-container">
 
-  <mat-list>
-    <mat-list-item style="padding-top: 10px;">
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="Filter Users by name..."
-          [(ngModel)]="searchString"
-        >
-      </mat-form-field>
-    </mat-list-item>
-    <mat-list-item *ngFor="let user of users | usersFilter: searchString | slice: lowValue : highValue">
-      <h3 matLine>{{user.name}} {{user.surname}}</h3>
-      <p matLine class="middle">
-        <span>Birthday: {{user.birthday | date: 'dd.MM.yyyy'}}</span>
-        <span>Email: {{user.email}}</span>
-        <span>Tel: {{user.phone}}</span>
-      </p>
-      <p matLine>Create/Update: {{ user["create/update"] | date: 'dd.MM.yyyy hh:mm'}}</p>
-      <button
-        mat-icon-button
-        color="primary"
-        (click)="editUser(user.id)"
-      >
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        color="warn"
-        (click)="this.deleteUser(user.id)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-  </mat-list>
-  <mat-paginator
-    [length]="users.length"
-    [pageSize]="5"
-    (page)="getPaginatorData($event)"
-    [pageSizeOptions]="[2, 5, 10]"
-  ></mat-paginator>
-</div>
+  <div class="users-loading-shade" *ngIf="isLoadingResults">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+  </div>
 
-<div *ngIf="loading" class="spiner__wrap">
-  <mat-spinner color="accent"></mat-spinner>
-</div>
+  <mat-card-header class="header">
+    <mat-card-title class="header__title">Users List</mat-card-title>
+    <div class="header__right">
+      <button mat-flat-button color="primary" (click)="this.openModal()">Add User</button>
+      <button mat-flat-button color="accent" [disabled]="!this.selection.selected.length>0"
+              (click)="this.deleteSelectedUsers()">Delete Selected
+      </button>
+    </div>
+  </mat-card-header>
+
+  <mat-divider></mat-divider>
+
+  <mat-card-content>
+    <div class="card__content">
+
+      <div class="card__btns">
+        <mat-radio-group class="role-radio-group">
+          <mat-radio-button
+            class="role-radio-item"
+            value="all"
+            checked
+            (change)="this.getAllUsers()"
+          >
+            All
+          </mat-radio-button>
+          <mat-radio-button
+            class="role-radio-item"
+            (change)="this.getUsersByRole($event.value)"
+            [value]="role"
+            *ngFor="let role of this.roles"
+          >
+            {{role}}s
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <mat-divider [vertical]="true"></mat-divider>
+      <div class="card__table" *ngIf="!isLoadingResults">
+        <table mat-table [dataSource]="usersData" class="users-table">
+
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox
+                (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                [aria-label]="checkboxLabel()"
+              ></mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let user">
+              <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="$event ? selection.toggle(user) : null"
+                [checked]="selection.isSelected(user)"
+                [aria-label]="checkboxLabel(user)"
+              ></mat-checkbox>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let user;let i = index;">{{i + 1}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Full Name</th>
+            <td mat-cell *matCellDef="let user">{{user._source.name}} {{user._source.surname}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let user">{{user._source.email}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>Telephone</th>
+            <td mat-cell *matCellDef="let user">{{user._source.phone}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="birthday">
+            <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+            <td mat-cell *matCellDef="let user">
+              {{user._source.birthday | date:'dd.MM.yyyy'}}
+              ({{this.calculateUserAge(user._source.birthday)}})
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="gender">
+            <th mat-header-cell *matHeaderCellDef>Gender</th>
+            <td mat-cell *matCellDef="let user">{{user._source.gender}}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="this.displayedColumns"></tr>
+          <tr mat-row class="users-element-row" *matRowDef="let user; columns: this.displayedColumns;"
+              (click)="this.openModal(user._id);"></tr>
+        </table>
+
+        <mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

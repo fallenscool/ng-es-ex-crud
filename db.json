@@ -6,7 +6,9 @@
     "surname": "Mars",
     "email": "mars26@mail.com",
     "phone": "0987654321",
-    "birthday": "2020-01-16T22:00:00.000Z"
+    "birthday": "2020-01-16T22:00:00.000Z",
+    "gender": "female",
+    "role": "developer"
   },
   {
     "id": 4,
@@ -15,7 +17,9 @@
     "surname": "Koles",
     "email": "danny123@gmail.com",
     "phone": "0993334455",
-    "birthday": "2020-01-21T22:00:00.000Z"
+    "birthday": "2020-01-21T22:00:00.000Z",
+    "gender": "male",
+    "role": "quality assurance"
   },
   {
     "id": 5,
@@ -24,7 +28,9 @@
     "surname": "Doe",
     "email": "joedoe@mail.com",
     "phone": "0992346677",
-    "birthday": "1974-06-28T21:00:00.000Z"
+    "birthday": "1974-06-28T21:00:00.000Z",
+    "gender": "male",
+    "role": "project manager"
   },
   {
     "id": 6,
@@ -33,7 +39,9 @@
     "surname": "Jay",
     "email": "jay@mail.com",
     "phone": "0123456789",
-    "birthday": "2020-01-13T22:00:00.000Z"
+    "birthday": "2020-01-13T22:00:00.000Z",
+    "gender": "male",
+    "role": "administrator"
   },
   {
     "id": 7,
@@ -42,7 +50,9 @@
     "surname": "Hawkey",
     "email": "hawkey@mail.com",
     "phone": "0123456789",
-    "birthday": "2020-01-06T22:00:00.000Z"
+    "birthday": "2020-01-06T22:00:00.000Z",
+    "gender": "male",
+    "role": "administrator"
   },
   {
     "id": 8,
@@ -51,6 +61,19 @@
     "surname": "User1",
     "email": "user@gmail.com",
     "phone": "0998765544",
-    "birthday": "2019-12-31T22:00:00.000Z"
+    "birthday": "2019-12-31T22:00:00.000Z",
+    "gender": "female",
+    "role": "project manager"
+  },
+  {
+    "id": 9,
+    "created": "2020-01-29T08:07:31.765Z",
+    "name": "Sam",
+    "surname": "sam",
+    "email": "sam@sam.com",
+    "phone": "0123654987",
+    "birthday": "2020-01-07T22:00:00.000Z",
+    "gender": "male",
+    "role": "quality assurance"
   }
 ]
